@@ -1,6 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import { useAuthStore } from '../store/authStore'
+import { env } from '../config/env'
 import styles from './Navbar.module.css'
 
 export default function Navbar() {
@@ -17,7 +18,7 @@ export default function Navbar() {
   return (
     <header className={styles.bar}>
       <Link to="/dashboard" className={styles.brand}>
-        BotForge
+        {env.appName}
       </Link>
       <div className={styles.right}>
         {user && (

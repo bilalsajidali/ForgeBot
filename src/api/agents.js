@@ -1,4 +1,5 @@
 import { api } from './index'
+import { env } from '../config/env'
 
 export async function listAgents() {
   const { data } = await api.get('/agents/list')
@@ -30,9 +31,10 @@ export async function uploadKnowledgeDocuments(id, files) {
     formData.append('files', file)
   }
   const res = await api.post(`/agents/${id}/knowledge/documents`, formData)
+  const hdr = res.headers
   const warnings =
-    res.headers['x-botforge-knowledge-warnings'] ||
-    res.headers['x-botforge-pdf-warnings'] ||
+    hdr[env.headers.knowledgeWarnings] ||
+    hdr[env.headers.pdfWarningsLegacy] ||
     ''
   return { agent: res.data, warnings }
 }

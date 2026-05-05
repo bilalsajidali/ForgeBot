@@ -1,10 +1,9 @@
 import axios from 'axios'
 import { useAuthStore } from '../store/authStore'
-
-const BASE_URL = 'http://localhost:8000'
+import { env } from '../config/env'
 
 export const api = axios.create({
-  baseURL: BASE_URL,
+  baseURL: env.apiBaseUrl,
 })
 
 api.interceptors.request.use((config) => {
@@ -35,5 +34,3 @@ api.interceptors.response.use(
     return Promise.reject(err)
   }
 )
-
-export { BASE_URL }

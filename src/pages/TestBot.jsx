@@ -6,12 +6,8 @@ import { sendTestMessage } from '../api/chat'
 import ChatWindow from '../components/ChatWindow'
 import { useAuthStore } from '../store/authStore'
 import { toastApiError } from '../utils/errors'
+import { buildEmbedSnippet } from '../config/embed'
 import styles from './TestBot.module.css'
-
-const EMBED_SNIPPET = (apiKey) => `<script>
-  window.BotForgeConfig = { apiKey: "${apiKey}" };
-</script>
-<script src="https://cdn.botforge.app/widget.js"></script>`
 
 function summarizeKnowledge(text, maxChars = 180) {
   const t = (text || '').replace(/\s+/g, ' ').trim()
@@ -142,7 +138,7 @@ export default function TestBot() {
         </div>
 
         <h2 className={styles.panelTitle}>Embed snippet</h2>
-        <pre className={styles.snippet}>{EMBED_SNIPPET(agent.api_key)}</pre>
+        <pre className={styles.snippet}>{buildEmbedSnippet(agent.api_key)}</pre>
         <button type="button" className={styles.copyBtn} onClick={copySnippet}>
           Copy embed code
         </button>

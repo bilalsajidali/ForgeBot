@@ -2,12 +2,11 @@ import { useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../store/authStore'
 import HeroScene from '../components/landing/HeroScene'
+import { env } from '../config/env'
+import { buildEmbedSnippet } from '../config/embed'
 import styles from './LandingPage.module.css'
 
-const EMBED_SNIPPET = `<script>
-  window.BotForgeConfig = { apiKey: "bf_live_your_key_here" };
-</script>
-<script src="https://cdn.botforge.app/widget.js"></script>`
+const EMBED_DOCS_SNIPPET = buildEmbedSnippet('bf_live_your_key_here')
 
 const PLANS = [
   {
@@ -46,7 +45,7 @@ export default function LandingPage() {
   return (
     <div className={styles.page}>
       <header className={styles.nav}>
-        <span className={styles.logo}>BotForge</span>
+        <span className={styles.logo}>{env.appName}</span>
         <nav className={styles.navLinks}>
           <a href="#integrate">Integrate</a>
           <a href="#how">How it works</a>
@@ -100,7 +99,7 @@ export default function LandingPage() {
           key—visitors chat; you stay within your plan limits.
         </p>
         <pre className={styles.codeBlock}>
-          <code>{EMBED_SNIPPET}</code>
+          <code>{EMBED_DOCS_SNIPPET}</code>
         </pre>
         <ul className={styles.checkList}>
           <li>Use HTTPS pages in production for best security.</li>
@@ -154,7 +153,7 @@ export default function LandingPage() {
         </div>
         <p className={styles.enterprise}>
           Need SAML, SLAs, or custom limits?{' '}
-          <a href="mailto:sales@botforge.app" className={styles.link}>
+          <a href={`mailto:${env.salesEmail}`} className={styles.link}>
             Talk to us about Enterprise
           </a>
           .
@@ -162,7 +161,7 @@ export default function LandingPage() {
       </section>
 
       <footer className={styles.footer}>
-        <span className={styles.logo}>BotForge</span>
+        <span className={styles.logo}>{env.appName}</span>
         <div className={styles.footerCt}>
           <Link to="/signup">Create free account</Link>
           <Link to="/login">Sign in</Link>
