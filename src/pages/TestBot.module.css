@@ -1,0 +1,118 @@
+.main {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 1.75rem 1.5rem 3rem;
+}
+
+.header {
+  margin-bottom: 1.5rem;
+}
+
+.back {
+  display: inline-block;
+  font-size: 0.85rem;
+  color: #9cb3ff;
+  text-decoration: none;
+  margin-bottom: 0.5rem;
+}
+
+.back:hover {
+  text-decoration: underline;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #f0f3f8;
+}
+
+.sub {
+  margin: 0.35rem 0 0;
+  font-size: 0.95rem;
+  color: #8b94a5;
+}
+
+.muted {
+  color: #8b94a5;
+  font-size: 0.95rem;
+}
+
+.panel {
+  padding: 1.15rem 1.25rem;
+  margin-bottom: 1.5rem;
+  background: #161922;
+  border: 1px solid #252a36;
+  border-radius: 12px;
+}
+
+.panelTitle {
+  margin: 0 0 0.6rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #7d8694;
+}
+
+.panelTitle:not(:first-child) {
+  margin-top: 1.25rem;
+}
+
+.keyRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.key {
+  flex: 1;
+  min-width: 0;
+  padding: 0.55rem 0.65rem;
+  font-size: 0.8rem;
+  word-break: break-all;
+  background: #12151c;
+  border: 1px solid #2f3545;
+  border-radius: 8px;
+  color: #c9d8ff;
+}
+
+.snippet {
+  margin: 0 0 0.65rem;
+  padding: 0.85rem 1rem;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  word-break: break-word;
+  background: #12151c;
+  border: 1px solid #2f3545;
+  border-radius: 10px;
+  color: #d4daf0;
+  overflow-x: auto;
+}
+
+.copyBtn {
+  padding: 0.45rem 0.85rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #0f1117;
+  background: #c9d8ff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.copyBtn:hover {
+  filter: brightness(1.05);
+}
+
+.chatSection {
+  margin-top: 0.5rem;
+}
+
+.warn {
+  margin: 0.75rem 0 0;
+  font-size: 0.85rem;
+  color: #f0a0a0;
+}

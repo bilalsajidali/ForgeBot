@@ -1,0 +1,60 @@
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.875rem 1.75rem;
+  background: #161922;
+  border-bottom: 1px solid #252a36;
+}
+
+.brand {
+  font-weight: 700;
+  font-size: 1.15rem;
+  letter-spacing: -0.02em;
+  color: #f0f3f8;
+  text-decoration: none;
+}
+
+.brand:hover {
+  color: #9cb3ff;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.name {
+  font-size: 0.9rem;
+  color: #c9d1dc;
+}
+
+.planBadge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.25rem 0.55rem;
+  border-radius: 999px;
+  background: #2a3144;
+  color: #9cb3ff;
+  border: 1px solid #3d4663;
+}
+
+.logout {
+  margin-left: 0.25rem;
+  padding: 0.45rem 0.9rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #e6e9ef;
+  background: #252a36;
+  border: 1px solid #353b4a;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.logout:hover {
+  background: #2f3545;
+  border-color: #454d62;
+}
