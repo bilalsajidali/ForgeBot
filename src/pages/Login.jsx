@@ -22,7 +22,7 @@ export default function Login() {
       const me = await getMe()
       setAuth(me, access_token)
       toast.success('Welcome back')
-      navigate('/', { replace: true })
+      navigate('/dashboard', { replace: true })
     } catch (err) {
       toastApiError(err, 'Login failed')
     } finally {

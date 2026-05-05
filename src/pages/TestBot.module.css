@@ -33,6 +33,12 @@
   color: #8b94a5;
 }
 
+.kb {
+  margin: 0.5rem 0 0;
+  font-size: 0.82rem;
+  color: #9cb3ff;
+}
+
 .muted {
   color: #8b94a5;
   font-size: 0.95rem;

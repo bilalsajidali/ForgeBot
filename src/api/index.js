@@ -21,8 +21,15 @@ api.interceptors.response.use(
     const status = err.response?.status
     if (status === 401) {
       useAuthStore.getState().logout()
-      if (typeof window !== 'undefined' && !window.location.pathname.startsWith('/login')) {
-        window.location.href = '/login'
+      if (typeof window !== 'undefined') {
+        const path = window.location.pathname
+        const isPublic =
+          path === '/' ||
+          path.startsWith('/login') ||
+          path.startsWith('/signup')
+        if (!isPublic) {
+          window.location.href = '/login'
+        }
       }
     }
     return Promise.reject(err)

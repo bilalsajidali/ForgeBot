@@ -16,7 +16,7 @@ export default function Navbar() {
 
   return (
     <header className={styles.bar}>
-      <Link to="/" className={styles.brand}>
+      <Link to="/dashboard" className={styles.brand}>
         BotForge
       </Link>
       <div className={styles.right}>

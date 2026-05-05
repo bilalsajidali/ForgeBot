@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import toast from 'react-hot-toast'
-import { getAgent, updateAgent } from '../api/agents'
+import { getAgent, updateAgent, uploadKnowledgeDocuments, deleteKnowledgeDocument } from '../api/agents'
 import FAQEditor from '../components/FAQEditor'
+import KnowledgeFilesEditor from '../components/KnowledgeFilesEditor'
 import { toastApiError } from '../utils/errors'
 import styles from './CreateBot.module.css'
 
@@ -27,10 +28,11 @@ export default function EditBot() {
   const { id } = useParams()
   const navigate = useNavigate()
   const [name, setName] = useState('')
-  const [businessName, setBusinessName] = useState('')
-  const [businessDescription, setBusinessDescription] = useState('')
+  const [botKnowledge, setBotKnowledge] = useState('')
   const [tone, setTone] = useState('friendly')
   const [faqs, setFaqs] = useState([])
+  const [documents, setDocuments] = useState([])
+  const [pendingFiles, setPendingFiles] = useState([])
   const [loadState, setLoadState] = useState('loading')
   const [saving, setSaving] = useState(false)
 
@@ -41,10 +43,10 @@ export default function EditBot() {
         const agent = await getAgent(id)
         if (cancelled) return
         setName(agent.name)
-        setBusinessName(agent.business_name)
-        setBusinessDescription(agent.business_description)
+        setBotKnowledge(agent.bot_knowledge ?? '')
         setTone(agent.tone || 'friendly')
         setFaqs(faqsFromAgent(agent))
+        setDocuments(agent.documents || [])
         setLoadState('ready')
       } catch (err) {
         if (!cancelled) {
@@ -61,25 +63,42 @@ export default function EditBot() {
 
   async function handleSubmit(e) {
     e.preventDefault()
-    if (businessDescription.trim().length < 10) {
-      toast.error('Business description must be at least 10 characters')
+    if (botKnowledge.trim().length < 10) {
+      toast.error('Bot knowledge must be at least 10 characters')
       return
     }
     setSaving(true)
     try {
       await updateAgent(id, {
         name: name.trim(),
-        business_name: businessName.trim(),
-        business_description: businessDescription.trim(),
+        bot_knowledge: botKnowledge.trim(),
         tone,
         faqs: normalizeFaqs(faqs),
       })
+      if (pendingFiles.length > 0) {
+        const { agent: refreshed, warnings } = await uploadKnowledgeDocuments(id, pendingFiles)
+        setDocuments(refreshed.documents || [])
+        setPendingFiles([])
+        if (warnings && warnings.trim()) {
+          toast(warnings.split(' | ').slice(0, 3).join(' · '), { duration: 8000 })
+        }
+      }
       toast.success('Bot saved')
-      navigate('/')
+      navigate('/dashboard')
     } catch (err) {
       toastApiError(err, 'Could not save bot')
     } finally {
       setSaving(false)
+    }
+  }
+
+  async function handleRemoveDocument(docIndex) {
+    try {
+      const updated = await deleteKnowledgeDocument(id, docIndex)
+      setDocuments(updated.documents || [])
+      toast.success('File removed')
+    } catch (err) {
+      toastApiError(err, 'Could not remove file')
     }
   }
 
@@ -95,7 +114,7 @@ export default function EditBot() {
     return (
       <main className={styles.main}>
         <p className={styles.lead}>Something went wrong. Go back to the dashboard.</p>
-        <button type="button" className={styles.submit} onClick={() => navigate('/')}>
+        <button type="button" className={styles.submit} onClick={() => navigate('/dashboard')}>
           Dashboard
         </button>
       </main>
@@ -105,7 +124,9 @@ export default function EditBot() {
   return (
     <main className={styles.main}>
       <h1 className={styles.h1}>Edit bot</h1>
-      <p className={styles.lead}>Update training data and how your bot speaks.</p>
+      <p className={styles.lead}>
+        Keep the bot name and core knowledge fresh, add PDFs/DOCX/TXT, and tune structured FAQs.
+      </p>
 
       <form className={styles.form} onSubmit={handleSubmit}>
         <label className={styles.label}>
@@ -120,26 +141,16 @@ export default function EditBot() {
           />
         </label>
         <label className={styles.label}>
-          Business name
-          <input
-            className={styles.input}
-            value={businessName}
-            onChange={(e) => setBusinessName(e.target.value)}
-            required
-            minLength={2}
-            disabled={saving}
-          />
-        </label>
-        <label className={styles.label}>
-          Business description
+          Bot knowledge
           <textarea
             className={styles.textarea}
-            value={businessDescription}
-            onChange={(e) => setBusinessDescription(e.target.value)}
+            value={botKnowledge}
+            onChange={(e) => setBotKnowledge(e.target.value)}
             required
             minLength={10}
-            rows={4}
+            rows={8}
             disabled={saving}
+            placeholder="Scope, audience, products, policies, what to avoid, anything the bot should always remember…"
           />
         </label>
         <label className={styles.label}>
@@ -155,6 +166,22 @@ export default function EditBot() {
             <option value="sales">Sales</option>
           </select>
         </label>
+
+        <KnowledgeFilesEditor
+          disabled={saving}
+          existingDocuments={documents}
+          onRemoveExisting={handleRemoveDocument}
+          pendingFiles={pendingFiles}
+          onAddFiles={(picked) =>
+            setPendingFiles((prev) => [
+              ...prev,
+              ...picked.filter((x) => !prev.some((p) => p.name === x.name && p.size === x.size)),
+            ])
+          }
+          onRemovePending={(idx) =>
+            setPendingFiles((prev) => prev.filter((_, i) => i !== idx))
+          }
+        />
 
         <FAQEditor faqs={faqs} onChange={setFaqs} />
 

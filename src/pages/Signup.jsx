@@ -23,7 +23,7 @@ export default function Signup() {
       const me = await getMe()
       setAuth(me, access_token)
       toast.success('Account created')
-      navigate('/', { replace: true })
+      navigate('/dashboard', { replace: true })
     } catch (err) {
       toastApiError(err, 'Signup failed')
     } finally {

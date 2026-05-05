@@ -13,6 +13,12 @@ const EMBED_SNIPPET = (apiKey) => `<script>
 </script>
 <script src="https://cdn.botforge.app/widget.js"></script>`
 
+function summarizeKnowledge(text, maxChars = 180) {
+  const t = (text || '').replace(/\s+/g, ' ').trim()
+  if (!t) return ''
+  return t.length > maxChars ? `${t.slice(0, maxChars)}…` : t
+}
+
 export default function TestBot() {
   const { id } = useParams()
   const patchUser = useAuthStore((s) => s.patchUser)
@@ -101,7 +107,7 @@ export default function TestBot() {
     return (
       <main className={styles.main}>
         <p className={styles.muted}>Unable to load this bot.</p>
-        <Link className={styles.back} to="/">
+        <Link className={styles.back} to="/dashboard">
           ← Dashboard
         </Link>
       </main>
@@ -112,11 +118,17 @@ export default function TestBot() {
     <main className={styles.main}>
       <div className={styles.header}>
         <div>
-          <Link className={styles.back} to="/">
+          <Link className={styles.back} to="/dashboard">
             ← Dashboard
           </Link>
           <h1 className={styles.title}>{agent.name}</h1>
-          <p className={styles.sub}>{agent.business_name}</p>
+          <p className={styles.sub}>{summarizeKnowledge(agent.bot_knowledge) || 'No knowledge summary yet.'}</p>
+          {(agent.documents ?? []).length > 0 && (
+            <p className={styles.kb}>
+              {(agent.documents ?? []).length} uploaded file
+              {(agent.documents ?? []).length === 1 ? '' : 's'} · knowledge library
+            </p>
+          )}
         </div>
       </div>
 
